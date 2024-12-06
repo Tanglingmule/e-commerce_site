@@ -205,7 +205,7 @@ function showSuccessMessage(message) {
 
 // Carousel Functions
 let currentSlide = 0;
-const featuredProducts = products.filter(product => product.rating >= 4.5).slice(0, 4);
+const featuredProducts = products.filter(product => product.rating >= 4.5).slice(0, 10  );
 
 function updateCarousel() {
     const track = document.querySelector('.carousel-track');
