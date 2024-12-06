@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleHub - Modern Fashion Store</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="light-mode">
+    <header>
+        <nav>
+            <div class="logo">StyleHub</div>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search products...">
+                <div id="searchSuggestions" class="search-suggestions"></div>
+            </div>
+            <div class="nav-controls">
+                <button id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="wishlist-icon">
+                    <i class="fas fa-heart"></i>
+                    <span id="wishlistCount">0</span>
+                </div>
+                <div class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cartCount">0</span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="featured-products">
+            <h2>Featured Products</h2>
+            <div class="carousel-container">
+                <button class="carousel-button prev">❮</button>
+                <div class="carousel-track">
+                    <!-- Products will be added dynamically -->
+                </div>
+                <button class="carousel-button next">❯</button>
+            </div>
+        </section>
+
+        <section class="filters">
+            <div class="category-filter">
+                <select id="categoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="clothing">Clothing</option>
+                    <option value="accessories">Accessories</option>
+                    <option value="shoes">Shoes</option>
+                </select>
+            </div>
+            <div class="price-filter">
+                <input type="range" id="priceRange" min="0" max="1000" step="10">
+                <span id="priceValue">$0 - $1000</span>
+            </div>
+        </section>
+
+        <section class="products-grid" id="productsGrid">
+            <!-- Products will be added dynamically -->
+        </section>
+
+        <div id="productModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="modal-body">
+                    <!-- Product details will be added dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <div id="cart" class="cart-sidebar">
+            <h2>Shopping Cart</h2>
+            <div class="cart-items">
+                <!-- Cart items will be added dynamically -->
+            </div>
+            <div class="cart-total">
+                <h3>Total: <span id="cartTotal">$0.00</span></h3>
+            </div>
+            <button id="checkoutBtn" class="checkout-btn">Proceed to Checkout</button>
+        </div>
+
+        <div id="wishlist" class="wishlist-sidebar">
+            <h2>Wishlist</h2>
+            <div class="wishlist-items">
+                <!-- Wishlist items will be added dynamically -->
+            </div>
+        </div>
+    </main>
+
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Checkout</h2>
+            <form id="checkoutForm">
+                <div class="form-group">
+                    <label for="name">Full Name:</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone:</label>
+                    <input type="tel" id="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Shipping Address:</label>
+                    <textarea id="address" required></textarea>
+                </div>
+                <button type="submit">Complete Purchase</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="products.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
