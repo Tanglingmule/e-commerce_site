@@ -10,6 +10,11 @@ const cartCount = document.getElementById('cartCount');
 const wishlistCount = document.getElementById('wishlistCount');
 const cartSidebar = document.getElementById('cart');
 const wishlistSidebar = document.getElementById('wishlist');
+const cartIcon = document.querySelector('.cart-icon');
+const wishlistIcon = document.querySelector('.wishlist-icon');
+const checkoutBtn = document.getElementById('checkoutBtn');
+const checkoutModal = document.getElementById('checkoutModal');
+const checkoutForm = document.getElementById('checkoutForm');
 
 // State Management
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -25,7 +30,8 @@ themeToggle.addEventListener('click', () => {
 });
 
 // Initialize theme from localStorage
-if (localStorage.getItem('theme') === 'dark') {
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'dark') {
     document.body.classList.add('dark-mode');
     themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
 }
@@ -197,61 +203,226 @@ function showSuccessMessage(message) {
     setTimeout(() => messageDiv.remove(), 3000);
 }
 
-// Carousel
+// Carousel Functions
 let currentSlide = 0;
-const featuredProducts = products.slice(0, 4); // Show first 4 products in carousel
+const featuredProducts = products.filter(product => product.rating >= 4.5).slice(0, 4);
 
 function updateCarousel() {
     const track = document.querySelector('.carousel-track');
-    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    const dots = document.querySelector('.carousel-dots');
+    
+    // Update slides
+    track.innerHTML = featuredProducts.map((product, index) => `
+        <div class="carousel-item">
+            <img src="${product.image}" alt="${product.name}">
+            <div class="carousel-item-info">
+                <h3>${product.name}</h3>
+                <p class="price">£${product.price.toFixed(2)}</p>
+                <div class="star-rating">${generateStars(product.rating)}</div>
+                <button onclick="addToCart(${product.id})" class="add-to-cart-btn">
+                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                </button>
+            </div>
+        </div>
+    `).join('');
+
+    // Update dots
+    dots.innerHTML = featuredProducts.map((_, index) => `
+        <div class="carousel-dot ${index === currentSlide ? 'active' : ''}" 
+             onclick="goToSlide(${index})"></div>
+    `).join('');
+
+    // Update slide position
+    track.style.transform = `translateX(-${currentSlide * 25}%)`;
 }
 
-document.querySelector('.prev').addEventListener('click', () => {
-    currentSlide = (currentSlide - 1 + featuredProducts.length) % featuredProducts.length;
+function goToSlide(index) {
+    if (index === currentSlide) return;
+    currentSlide = index;
     updateCarousel();
+}
+
+function moveCarousel(direction) {
+    if (direction === 'prev') {
+        currentSlide = (currentSlide - 1 + featuredProducts.length) % featuredProducts.length;
+    } else {
+        currentSlide = (currentSlide + 1) % featuredProducts.length;
+    }
+    updateCarousel();
+}
+
+// Initialize carousel
+updateCarousel();
+
+// Add event listeners for carousel controls
+document.querySelector('.prev').addEventListener('click', () => moveCarousel('prev'));
+document.querySelector('.next').addEventListener('click', () => moveCarousel('next'));
+
+// Auto-advance carousel with pause on hover
+let carouselInterval;
+
+function startCarouselAutoPlay() {
+    carouselInterval = setInterval(() => {
+        moveCarousel('next');
+    }, 5000);
+}
+
+function stopCarouselAutoPlay() {
+    clearInterval(carouselInterval);
+}
+
+// Add hover listeners to pause/resume autoplay
+const carouselContainer = document.querySelector('.carousel-container');
+carouselContainer.addEventListener('mouseenter', stopCarouselAutoPlay);
+carouselContainer.addEventListener('mouseleave', startCarouselAutoPlay);
+
+// Start autoplay initially
+startCarouselAutoPlay();
+
+// Handle touch events for mobile swipe
+let touchStartX = 0;
+let touchEndX = 0;
+
+carouselContainer.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    stopCarouselAutoPlay();
 });
 
-document.querySelector('.next').addEventListener('click', () => {
-    currentSlide = (currentSlide + 1) % featuredProducts.length;
-    updateCarousel();
+carouselContainer.addEventListener('touchmove', (e) => {
+    touchEndX = e.touches[0].clientX;
 });
 
-// Initialize
-displayProducts(products);
-updateCart();
-updateWishlist();
+carouselContainer.addEventListener('touchend', () => {
+    const swipeDistance = touchEndX - touchStartX;
+    if (Math.abs(swipeDistance) > 50) { // Minimum swipe distance
+        if (swipeDistance > 0) {
+            moveCarousel('prev');
+        } else {
+            moveCarousel('next');
+        }
+    }
+    startCarouselAutoPlay();
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') {
+        moveCarousel('prev');
+    } else if (e.key === 'ArrowRight') {
+        moveCarousel('next');
+    }
+});
 
 // Product Modal
 function showProductModal(product) {
     const modal = document.getElementById('productModal');
     const modalBody = modal.querySelector('.modal-body');
+    
     modalBody.innerHTML = `
-        <div class="product-detail">
+        <div class="product-modal-content">
             <img src="${product.image}" alt="${product.name}">
-            <div class="product-info">
+            <div class="product-details">
                 <h2>${product.name}</h2>
                 <p class="price">£${product.price.toFixed(2)}</p>
-                <p>${product.description}</p>
-                <div class="star-rating" data-rating="${product.rating}">
-                    ${generateStars(product.rating)}
+                <div class="star-rating">${generateStars(product.rating)}</div>
+                <p class="reviews">${product.reviews} reviews</p>
+                <p class="description">${product.description}</p>
+                <div class="modal-buttons">
+                    <button onclick="addToCart(${product.id})">Add to Cart</button>
+                    <button onclick="toggleWishlist(${product.id})">
+                        <i class="fas fa-heart ${wishlist.includes(product.id) ? 'active' : ''}"></i>
+                        Add to Wishlist
+                    </button>
                 </div>
-                <p>${product.reviews} reviews</p>
-                <button onclick="addToCart(${product.id})">Add to Cart</button>
-                <button onclick="toggleWishlist(${product.id})">
-                    <i class="fas fa-heart ${wishlist.includes(product.id) ? 'active' : ''}"></i>
-                </button>
             </div>
         </div>
     `;
+    
     modal.style.display = 'block';
 }
 
+// Sidebar Toggle
+cartIcon.addEventListener('click', () => {
+    cartSidebar.classList.toggle('active');
+    wishlistSidebar.classList.remove('active');
+});
+
+wishlistIcon.addEventListener('click', () => {
+    wishlistSidebar.classList.toggle('active');
+    cartSidebar.classList.remove('active');
+});
+
+// Close sidebars when clicking outside
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.cart-sidebar') && 
+        !e.target.closest('.cart-icon') && 
+        !e.target.closest('.wishlist-sidebar') && 
+        !e.target.closest('.wishlist-icon')) {
+        cartSidebar.classList.remove('active');
+        wishlistSidebar.classList.remove('active');
+    }
+});
+
+// Checkout Form
+checkoutBtn.addEventListener('click', () => {
+    if (cart.length === 0) {
+        showSuccessMessage('Your cart is empty!');
+        return;
+    }
+    checkoutModal.style.display = 'block';
+});
+
+checkoutForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    // Get form data
+    const formData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        address: document.getElementById('address').value
+    };
+    
+    // Simulate order processing
+    showSuccessMessage('Processing your order...');
+    setTimeout(() => {
+        // Clear cart
+        cart = [];
+        updateCart();
+        
+        // Close modal and show success
+        checkoutModal.style.display = 'none';
+        showSuccessMessage('Order placed successfully! Thank you for shopping with us.');
+        
+        // Reset form
+        checkoutForm.reset();
+    }, 2000);
+});
+
 // Close modals when clicking outside
-window.onclick = function(event) {
-    const modals = document.getElementsByClassName('modal');
-    for (let modal of modals) {
-        if (event.target === modal) {
+window.addEventListener('click', (event) => {
+    if (event.target.classList.contains('modal')) {
+        event.target.style.display = 'none';
+    }
+});
+
+// Add close button functionality for all modals
+document.querySelectorAll('.close').forEach(closeButton => {
+    closeButton.addEventListener('click', () => {
+        const modal = closeButton.closest('.modal');
+        if (modal) {
             modal.style.display = 'none';
         }
-    }
-};
+    });
+});
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', () => {
+    displayProducts(products);
+    updateCart();
+    updateWishlist();
+    
+    // Set initial price range value
+    priceRange.value = 1000;
+    priceValue.textContent = `£0 - £${priceRange.value}`;
+});

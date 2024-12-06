@@ -78,5 +78,15 @@ const products = [
         image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
         rating: 4.8,
         reviews: 194
+    },
+    {
+        id: 9,
+        name: "Skibidi Toilet",
+        price: 59.99,
+        category: "accessories",
+        description: "Skibidi Toilet",
+        image: "https://plus.unsplash.com/premium_photo-1674815329632-12282e4fd0b8?q=80&w=1904&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        rating: 4.8,
+        reviews: 194
     }
 ];

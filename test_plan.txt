@@ -1,0 +1,190 @@
+E-COMMERCE WEBSITE TEST PLAN
+===========================
+
+1. User Interface Testing
+------------------------
+1.1 Theme Toggle
+    - Verify dark/light mode switch works
+    - Check all elements adapt to theme changes
+    - Confirm theme preference is saved in localStorage
+
+1.2 Responsive Design
+    - Test on different screen sizes (desktop, tablet, mobile)
+    - Verify navigation menu adapts to mobile view
+    - Check product grid responsiveness
+    - Ensure carousel is usable on all devices
+    - Test touch interactions on mobile devices
+
+1.3 Carousel Functionality
+    - Verify automatic sliding works
+    - Test manual navigation (prev/next buttons)
+    - Check dot navigation functionality
+    - Confirm hover pause feature
+    - Test swipe gestures on touch devices
+    - Verify keyboard navigation (left/right arrows)
+    - Check transition animations
+    - Ensure featured products display correctly
+
+2. Product Features
+------------------
+2.1 Product Display
+    - Verify all product information is displayed correctly
+    - Check product images load properly
+    - Test star rating display
+    - Confirm price formatting
+    - Verify product categories are correct
+
+2.2 Search Functionality
+    - Test search input functionality
+    - Verify search suggestions appear
+    - Check search results accuracy
+    - Test empty search handling
+    - Verify search suggestions are clickable
+
+2.3 Filtering
+    - Test category filter dropdown
+    - Verify price range filter
+    - Check filter combinations work
+    - Test filter reset functionality
+    - Verify filtered results are accurate
+
+3. Shopping Features
+-------------------
+3.1 Cart Functionality
+    - Test adding items to cart
+    - Verify cart count updates
+    - Check cart sidebar opens/closes
+    - Test removing items from cart
+    - Verify cart total calculation
+    - Check cart persistence across page reload
+    - Test cart item quantity updates
+
+3.2 Wishlist Features
+    - Test adding items to wishlist
+    - Verify wishlist count updates
+    - Check wishlist sidebar opens/closes
+    - Test removing items from wishlist
+    - Verify wishlist persistence
+    - Check wishlist icon state changes
+
+3.3 Checkout Process
+    - Test checkout form validation
+    - Verify required fields
+    - Check email format validation
+    - Test phone number format
+    - Verify address field
+    - Test form submission
+    - Check success message
+    - Verify cart clears after checkout
+
+4. Performance Testing
+---------------------
+4.1 Load Testing
+    - Measure initial page load time
+    - Test image loading performance
+    - Check carousel performance
+    - Verify smooth scrolling
+    - Test filter response time
+    - Check search response time
+
+4.2 Memory Usage
+    - Monitor memory usage during extended browsing
+    - Check for memory leaks
+    - Test performance with large product catalog
+    - Verify smooth animations
+
+5. Browser Compatibility
+-----------------------
+5.1 Desktop Browsers
+    - Test on Chrome
+    - Test on Firefox
+    - Test on Safari
+    - Test on Edge
+    - Verify consistent appearance
+    - Check functionality across browsers
+
+5.2 Mobile Browsers
+    - Test on iOS Safari
+    - Test on Chrome for Android
+    - Check touch interactions
+    - Verify responsive design
+    - Test mobile-specific features
+
+6. Error Handling
+----------------
+6.1 Input Validation
+    - Test form field validation
+    - Check error message display
+    - Verify required field handling
+    - Test invalid input handling
+
+6.2 Error States
+    - Test network error handling
+    - Check image load failures
+    - Verify error message clarity
+    - Test recovery from errors
+
+7. Accessibility Testing
+-----------------------
+7.1 Screen Reader Compatibility
+    - Test with screen readers
+    - Verify alt text for images
+    - Check ARIA labels
+    - Test keyboard navigation
+    - Verify focus states
+
+7.2 Visual Accessibility
+    - Check color contrast
+    - Test text readability
+    - Verify button sizes
+    - Check focus indicators
+    - Test with different font sizes
+
+8. Security Testing
+------------------
+8.1 Data Handling
+    - Verify secure storage of user data
+    - Check localStorage security
+    - Test form data handling
+    - Verify no sensitive data exposure
+
+8.2 Input Security
+    - Test for XSS vulnerabilities
+    - Check input sanitization
+    - Verify URL parameter handling
+    - Test file upload security (if applicable)
+
+9. Integration Testing
+---------------------
+9.1 Component Integration
+    - Test interaction between components
+    - Verify state management
+    - Check event handling
+    - Test data flow between components
+
+9.2 API Integration (Future)
+    - Test API endpoints
+    - Verify data formatting
+    - Check error handling
+    - Test response handling
+
+10. User Experience Testing
+-------------------------
+10.1 Navigation Flow
+    - Test natural user flow
+    - Verify intuitive interface
+    - Check for dead ends
+    - Test breadcrumb navigation
+
+10.2 Feedback
+    - Verify success messages
+    - Check error notifications
+    - Test loading indicators
+    - Verify user action feedback
+
+Notes:
+- Test cases should be executed on both development and production environments
+- Document any bugs or issues found during testing
+- Verify fixes don't introduce new issues
+- Regular regression testing is recommended
+- Update test plan as new features are added
