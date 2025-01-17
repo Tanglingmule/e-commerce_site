@@ -416,11 +416,60 @@ document.querySelectorAll('.close').forEach(closeButton => {
     });
 });
 
+// Initialize product chart
+function initializeProductChart() {
+    const categoryCount = products.reduce((acc, product) => {
+        acc[product.category] = (acc[product.category] || 0) + 1;
+        return acc;
+    }, {});
+
+    const ctx = document.getElementById('productChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Clothing', 'Accessories', 'Shoes'],
+            datasets: [{
+                data: [
+                    categoryCount['clothing'] || 0,
+                    categoryCount['accessories'] || 0,
+                    categoryCount['shoes'] || 0
+                ],
+                backgroundColor: ['#4a90e2', '#f39c12', '#e74c3c'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+                display: false
+            },
+            plugins: {
+                datalabels: {
+                    color: '#fff',
+                    anchor: 'center',
+                    align: 'center',
+                    font: {
+                        weight: 'bold',
+                        size: 14
+                    },
+                    formatter: function(value, context) {
+                        let sum = context.dataset.data.reduce((a, b) => a + b, 0);
+                        let percentage = Math.round((value * 100 / sum)) + '%';
+                        return value + '\n' + percentage;
+                    }
+                }
+            }
+        }
+    });
+}
+
 // Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
     displayProducts(products);
     updateCart();
     updateWishlist();
+    initializeProductChart();
     
     // Set initial price range value
     priceRange.value = 1000;
